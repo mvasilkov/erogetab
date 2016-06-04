@@ -1,3 +1,7 @@
+.vs/
 __pycache__/
+cache/
+node_modules/
+pictures/
 virtual/
 *.sqlite3

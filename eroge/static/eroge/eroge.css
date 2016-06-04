@@ -1,0 +1,15 @@
+﻿@import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+
+.game-picture img {
+    max-height: 300px;
+    max-width: 300px;
+}
+
+.game-meta h3 {
+    font-family: 'Noto Sans Japanese', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 35px;
+}
+
+.game-meta .jap {
+    font-family: 'Noto Sans Japanese', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'MS Pゴシック', 'MS PGothic', sans-serif;
+}

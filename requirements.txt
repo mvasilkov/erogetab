@@ -1,1 +1,5 @@
+beautifulsoup4==4.4.1
 Django==1.9.6
+django-npm==1.0.0
+html5lib==0.9999999
+requests==2.10.0
