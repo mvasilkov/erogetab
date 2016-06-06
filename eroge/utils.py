@@ -11,6 +11,16 @@ DLSITE_E = re.compile(r'^http://www\.dlsite\.com/ecchi-eng/work/=/product_id/(RE
 MAKE_DLSITE_J = 'http://www.dlsite.com/maniax/work/=/product_id/%s.html'
 MAKE_DLSITE_E = 'http://www.dlsite.com/ecchi-eng/work/=/product_id/%s.html'
 
+def _override_filename(name):
+    from .models import OverrideFilename
+
+    if not _override_filename.cache:
+        _override_filename.cache = dict(OverrideFilename.objects.values_list('name', 'filename'))
+
+    return _override_filename.cache.get(name, None)
+
+_override_filename.cache = None
+
 class HTTPError(RuntimeError):
     def __init__(self, status_code):
         self.status_code = status_code
@@ -93,17 +103,14 @@ def make_filename(game):
     if game.dlsite_has_eng:
         name = game.dlsite_name_eng
         # Game-specific cleanup
-        if name.startswith('pleasure machine/orgasm factory '):
-            name = ' '.join(word.capitalize() for word in re.split(r'[/ ]', name)[:-1])
-        elif name.startswith('NDNL -') or name.startswith('NDNL2 -'):
-            name = name[name.index('-'):].strip('-')
-        elif name.endswith('! JIZZ MISTRESS'):
-            name = name.replace('! JIZZ MISTRESS', '')
+        result = _override_filename(name)
+        if result:
+            return result
         # Common cleanup
         name = re.sub(r' -.*?-$', '', name)
         name = re.sub(r' ~.*?~$', '', name)
-        name = re.sub(r'[,"?!:]', '', name)
         name = name.replace('*', '■')
+        name = re.sub(r'[^\w ■]', '', name)
     else:
         name = game.dlsite_name
         # Fullwidth chars

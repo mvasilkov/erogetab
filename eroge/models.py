@@ -8,3 +8,7 @@ class Game(models.Model):
 
     def __str__(self):
         return 'RJ' + self.dlsite
+
+class OverrideFilename(models.Model):
+    name = models.CharField(max_length=250)
+    filename = models.CharField(max_length=250)
