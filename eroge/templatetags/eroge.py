@@ -6,11 +6,17 @@ register = template.Library()
 
 @register.filter
 def dlsite_picture(game):
-    return '/pictures/dlsite/RJ%s.jpeg' % game.dlsite
+    if game.dlsite:
+        return '/pictures/dlsite/RJ%s.jpeg' % game.dlsite
+    elif game.getchu:
+        return '/pictures/getchu/%s.jpeg' % game.getchu
 
 @register.filter
 def game_folder(game):
-    return 'Eroge_dlsite'
+    if game.dlsite:
+        return 'Eroge_dlsite'
+    elif game.getchu:
+        return 'Eroge_getchu'
 
 @register.filter
 def game_save_as(game):

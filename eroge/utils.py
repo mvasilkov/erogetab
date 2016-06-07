@@ -7,9 +7,11 @@ import requests
 
 DLSITE_J = re.compile(r'^http://www\.dlsite\.com/maniax/work/=/product_id/(RJ\d{6})\.html$')
 DLSITE_E = re.compile(r'^http://www\.dlsite\.com/ecchi-eng/work/=/product_id/(RE\d{6})\.html$')
+GETCHU = re.compile(r'^http://www\.getchu\.com/soft\.phtml\?id=(\d{6})(&gc=gc)?$')
 
 MAKE_DLSITE_J = 'http://www.dlsite.com/maniax/work/=/product_id/%s.html'
 MAKE_DLSITE_E = 'http://www.dlsite.com/ecchi-eng/work/=/product_id/%s.html'
+MAKE_GETCHU = 'http://www.getchu.com/soft.phtml?id=%s'
 
 def _override_filename(name):
     from .models import OverrideFilename
@@ -29,7 +31,7 @@ class HTTPError(RuntimeError):
         return 'HTTP Error: ' + self.status_code
 
 def get_game_id(address):
-    for regex in DLSITE_J, DLSITE_E:
+    for regex in DLSITE_J, DLSITE_E, GETCHU:
         found = regex.match(address)
         if found:
             return found.group(1)
@@ -44,6 +46,10 @@ def get_cache_path(address):
     found = DLSITE_E.match(address)
     if found:
         return 'cache/dlsite_eng/%s.html' % found.group(1)
+
+    found = GETCHU.match(address)
+    if found:
+        return 'cache/getchu/%s.html' % found.group(1)
 
     raise ValueError('Bad address: ' + address)
 
@@ -107,12 +113,12 @@ def make_filename(game):
         if result:
             return result
         # Common cleanup
-        name = re.sub(r' -.*?-$', '', name)
-        name = re.sub(r' ~.*?~$', '', name)
+        name = re.sub(r' +-.*?-$', '', name)
+        name = re.sub(r' +~.*?~$', '', name)
         name = name.replace('*', '■')
         name = re.sub(r'[^\w ■]', '', name)
     else:
-        name = game.dlsite_name
+        name = game.dlsite_name or game.getchu_name
         # Fullwidth chars
         name = name.replace('?', '？')
         name = name.replace('!', '！')

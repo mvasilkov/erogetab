@@ -17,8 +17,10 @@
                 {% if game.dlsite_has_eng %}
                 <h3>{{ game.dlsite_name_eng }}</h3>
                 <h6 class="jap">{{ game.dlsite_name }}</h6>
-                {% else %}
+                {% elif game.dlsite %}
                 <h3 class="jap">{{ game.dlsite_name }}</h3>
+                {% else %}
+                <h3 class="jap">{{ game.getchu_name }}</h3>
                 {% endif %}
                 <p>
                     <code>{{ game|game_folder }}/</code>
@@ -27,6 +29,9 @@
                 <p>
                     {% if game.dlsite %}
                     <span class="tag is-info">RJ{{ game.dlsite }}</span>
+                    {% endif %}
+                    {% if game.getchu %}
+                    <span class="tag is-info">CHU{{ game.getchu }}</span>
                     {% endif %}
                 </p>
             </div>
